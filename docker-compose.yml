@@ -1,0 +1,22 @@
+services:
+  gateway:
+    image: 'gateway'
+    ports:
+      - 3000:3000
+    volumes:
+      - ./gateway:/app
+  auth:
+    image: 'auth'
+    ports:
+      - 3001:3001
+    volumes:
+      - ./microservices/auth:/app
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - '15672:15672' # Management UI
+      - '5672:5672' # Default RabbitMQ Port
+
+volumes:
+  mydata:
