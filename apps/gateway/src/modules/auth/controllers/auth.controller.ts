@@ -14,13 +14,15 @@ import { CreatePostUserDto } from '../../common/dtos/sign-up.dto';
 import { CreateForgotPasswordDto } from '../../common/dtos/forgot-password.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { ClientProxy } from '@nestjs/microservices';
+import { APP_MICROSERVICES } from '@/libs/common/src';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    @Inject('AUTH_MICROSERVICE') private readonly authClient: ClientProxy,
+    @Inject(APP_MICROSERVICES.AUTH_MICROSERVICE)
+    private readonly authClient: ClientProxy,
   ) {}
 
   @Post('log-in')

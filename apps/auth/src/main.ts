@@ -1,20 +1,17 @@
 import { NestFactory } from '@nestjs/core';
 import { AuthModule } from './auth.module';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { MicroserviceOptions } from '@nestjs/microservices';
+import { RabbitMQService } from '@/libs/common/src';
+import { RABBIT_MQ_QUEUE } from '@/libs/common/src';
 
 async function bootstrap() {
   const app = await NestFactory.create(AuthModule);
-  app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.RMQ,
-    options: {
-      urls: ['amqp://guest:guest@localhost:5672'],
-      queue: 'auth-queue',
-      // noAck: false,
-      queueOptions: {
-        durable: false,
-      },
-    },
-  });
+
+  const rabbitMqService = app.get<RabbitMQService>(RabbitMQService);
+
+  app.connectMicroservice<MicroserviceOptions>(
+    rabbitMqService.getOptions(RABBIT_MQ_QUEUE.AUTH_QUEUE, true),
+  );
 
   app.startAllMicroservices();
 }

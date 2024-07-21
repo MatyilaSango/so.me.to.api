@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AuthController } from './controllers/auth.controller';
 import { AuthService } from './services/auth.service';
-import { CommonLibModule } from '@/libs/common/src';
+import { LoggerModule } from '@/libs/common/src';
+import { RabbitMQModule } from '@/libs/common/src';
 
 @Module({
-  imports: [CommonLibModule],
+  imports: [LoggerModule, RabbitMQModule],
   controllers: [AuthController],
   providers: [AuthService],
 })

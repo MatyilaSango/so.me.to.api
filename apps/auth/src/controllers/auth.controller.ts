@@ -10,6 +10,7 @@ export class AuthController {
 
   @MessagePattern({ cmd: 'login' })
   logIn(@Payload() createAuthDto) {
+    console.log('here');
     return createAuthDto;
   }
 
