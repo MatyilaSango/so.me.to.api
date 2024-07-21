@@ -1,16 +1,32 @@
+version: '3.9'
 services:
-  gateway:
-    image: 'gateway'
-    ports:
-      - 3000:3000
-    volumes:
-      - ./gateway:/app
-  auth:
-    image: 'auth'
-    ports:
-      - 3001:3001
-    volumes:
-      - ./microservices/auth:/app
+  # gateway:
+  #   # image: gateway
+  #   build:
+  #     context: gateway
+  #   command:
+  #     - npm
+  #     - run
+  #     - start:dev
+  #   ports:
+  #     - 3000:3000
+  #   volumes:
+  #     - ./gateway:/app
+  #     - nodemodules_gateway:/app/node_modules
+  #   depends_on:
+  #     - rabbitmq
+
+  # auth:
+  #   # image: auth
+  #   build: microservices/auth
+  #   command: npm run start:dev
+  #   ports:
+  #     - 3001:3001
+  #   volumes:
+  #     - ./microservices/auth:/app
+  #     - nodemodules_auth:/app/node_modules
+  #   depends_on:
+  #     - rabbitmq
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -18,5 +34,6 @@ services:
       - '15672:15672' # Management UI
       - '5672:5672' # Default RabbitMQ Port
 
-volumes:
-  mydata:
+# volumes:
+#   nodemodules_gateway: {}
+#   nodemodules_auth: {}
