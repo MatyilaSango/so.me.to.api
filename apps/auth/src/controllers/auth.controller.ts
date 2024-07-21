@@ -3,14 +3,14 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 import { AuthService } from '../services/auth.service';
 import { CreateAuthDto } from '../dto/create-auth.dto';
 import { UpdateAuthDto } from '../dto/update-auth.dto';
+import { CreateLogInDTO } from '@/libs/common/src/dtos/log-in.dto';
 
 @Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @MessagePattern({ cmd: 'login' })
-  logIn(@Payload() createAuthDto) {
-    console.log('here');
+  logIn(@Payload() createAuthDto: CreateLogInDTO) {
     return createAuthDto;
   }
 

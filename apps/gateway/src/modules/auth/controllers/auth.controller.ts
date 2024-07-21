@@ -8,10 +8,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
-import { CreateLogInDTO } from '../../common/dtos/log-in.dto';
+import { CreateLogInDTO } from '@/libs/common/src/dtos/log-in.dto';
 import { ValidateBodyGuard } from '../guards/ValidateBody.guard';
-import { CreatePostUserDto } from '../../common/dtos/sign-up.dto';
-import { CreateForgotPasswordDto } from '../../common/dtos/forgot-password.dto';
+import { CreatePostUserDto } from '@/libs/common/src/dtos/sign-up.dto';
+import { CreateForgotPasswordDto } from '@/libs/common/src/dtos/forgot-password.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { ClientProxy } from '@nestjs/microservices';
 import { APP_MICROSERVICES } from '@/libs/common/src';
