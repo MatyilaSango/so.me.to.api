@@ -9,5 +9,5 @@ export const isEmptyObject = (body: object): body is object => {
 
   const bodyKeys = Object.keys(body);
 
-  return bodyKeys.length > 0;
+  return bodyKeys.length === 0;
 };

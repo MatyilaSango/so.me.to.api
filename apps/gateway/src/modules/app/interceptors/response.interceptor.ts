@@ -1,3 +1,4 @@
+import { getResponeMetaData } from '@/libs/common/src/helpers/intercepter.helper';
 import {
   CallHandler,
   ExecutionContext,
@@ -18,14 +19,7 @@ export class ResponseInterceptor implements NestInterceptor {
           statusCode: response.statusCode,
           ...data,
         },
-        _metadata: {
-          status: response.statusCode,
-          message: response.message,
-          timestamp: new Date().toISOString(),
-          protocol: context.getType(),
-          host: request.hostname,
-          enpoint: request.url,
-        },
+        _metadata: getResponeMetaData(context, response, request),
       })),
     );
   }

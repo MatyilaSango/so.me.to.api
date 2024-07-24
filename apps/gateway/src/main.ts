@@ -1,14 +1,23 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './modules/app/app.module';
-import { ResponseInterceptor } from './modules/app/interceptors/response.interceptor';
+import Interceptors from './modules/app/interceptors';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { LoggerService } from '@/libs/common/src/logger/logger.service';
 import { ConfigService } from '@nestjs/config';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api/v1');
-  app.useGlobalInterceptors(new ResponseInterceptor());
+
+  const { ResponseInterceptor, ExceptionInterceptor } = Interceptors;
+
+  app.useGlobalInterceptors(
+    new ResponseInterceptor(),
+    new ExceptionInterceptor(),
+  );
+
+  app.useGlobalPipes(new ValidationPipe());
 
   const loggerService = app.get<LoggerService>(LoggerService);
   const configService = app.get<ConfigService>(ConfigService);

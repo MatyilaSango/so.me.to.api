@@ -5,11 +5,9 @@ import {
   HttpStatus,
   Inject,
   Post,
-  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
 import { CreateLogInDTO } from '@/libs/common/src/dtos/log-in.dto';
-import { ValidateBodyGuard } from '../guards/ValidateBody.guard';
 import { CreatePostUserDto } from '@/libs/common/src/dtos/sign-up.dto';
 import { CreateForgotPasswordDto } from '@/libs/common/src/dtos/forgot-password.dto';
 import { ApiTags } from '@nestjs/swagger';
@@ -27,21 +25,18 @@ export class AuthController {
 
   @Post('log-in')
   @HttpCode(HttpStatus.OK)
-  @UseGuards(ValidateBodyGuard)
   logIn(@Body() logInDto: CreateLogInDTO) {
     return this.authClient.send({ cmd: 'login' }, logInDto);
   }
 
   @Post('sign-up')
   @HttpCode(HttpStatus.CREATED)
-  @UseGuards(ValidateBodyGuard)
   signUp(@Body() signUpDto: CreatePostUserDto) {
     return this.authService.signUp(signUpDto);
   }
 
   @Post('forgot-password')
   @HttpCode(HttpStatus.OK)
-  @UseGuards(ValidateBodyGuard)
   forgotPassword(@Body() forgotPasswordDto: CreateForgotPasswordDto) {
     return this.authService.forgotPassword(forgotPasswordDto);
   }
