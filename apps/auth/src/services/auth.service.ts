@@ -1,26 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from '../dto/create-auth.dto';
-import { UpdateAuthDto } from '../dto/update-auth.dto';
+import { CreateLogInDTO } from '@/libs/common/src/dtos/log-in.dto';
+import { UserService } from '@/libs/common/src/database/user/services/user.service';
+import { users } from '@/libs/common/src/database/user/entities/user.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
-  }
+  private readonly SALT_ROUNDS: number = 10;
 
-  findAll() {
-    return `This action returns all auth`;
-  }
+  constructor(private userService: UserService) {}
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
+  /**
+   * Log users in by finding their accounts.
+   *
+   * @param {CreateLogInDTO} param - Login credentials.
+   * @returns {Promise<users | null>} users
+   */
+  async login({ username, password }: CreateLogInDTO): Promise<users | null> {
+    const users: users[] = await this.userService.findByUsername(username);
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
+    for (const user of users) {
+      const isRightUser = await bcrypt.compare(password, user.Password);
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+      if (!isRightUser) continue;
+
+      delete user.Password;
+
+      if (isRightUser) return user;
+    }
+
+    return null;
   }
 }

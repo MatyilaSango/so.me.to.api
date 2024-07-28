@@ -3,18 +3,17 @@ import {
   CallHandler,
   ExecutionContext,
   HttpException,
-  HttpStatus,
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 @Injectable()
 export class ExceptionInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    const response = context.switchToHttp().getResponse();
-    const request = context.switchToHttp().getRequest();
+    const request: Request = context.switchToHttp().getRequest();
 
     return next.handle().pipe(
       catchError((err) =>
@@ -23,10 +22,13 @@ export class ExceptionInterceptor implements NestInterceptor {
             new HttpException(
               {
                 data: err,
-                _metadata: getResponeMetaData(context, response, request),
+                _metadata: getResponeMetaData(
+                  err.response.statusCode,
+                  context,
+                  request,
+                ),
               },
-
-              HttpStatus.BAD_GATEWAY,
+              err.response.statusCode,
             ),
         ),
       ),

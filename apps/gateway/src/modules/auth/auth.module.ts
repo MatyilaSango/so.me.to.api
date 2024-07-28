@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AuthService } from './services/auth.service';
 import { AuthController } from './controllers/auth.controller';
 import { RabbitMQModule } from '@/libs/common/src';
 import { RABBIT_MQ_QUEUE } from '@/libs/common/src';
@@ -12,6 +11,6 @@ import { RABBIT_MQ_QUEUE } from '@/libs/common/src';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [],
 })
 export class AuthModule {}

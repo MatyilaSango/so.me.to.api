@@ -19,7 +19,7 @@ export class ResponseInterceptor implements NestInterceptor {
           statusCode: response.statusCode,
           ...data,
         },
-        _metadata: getResponeMetaData(context, response, request),
+        _metadata: getResponeMetaData(response.statusCode, context, request),
       })),
     );
   }
