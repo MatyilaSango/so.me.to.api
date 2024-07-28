@@ -4,8 +4,8 @@ import {
   HttpCode,
   HttpStatus,
   Inject,
-  NotFoundException,
   Post,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { CreateLogInDTO } from '@/libs/common/src/dtos/log-in.dto';
 import { CreatePostUserDto } from '@/libs/common/src/dtos/sign-up.dto';
@@ -32,7 +32,7 @@ export class AuthController {
     ) as Observable<users | null>;
 
     await user.forEach((_user) => {
-      if (!_user) throw new NotFoundException();
+      if (!_user) throw new UnauthorizedException();
     });
 
     return user;
