@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Inject,
@@ -15,6 +16,8 @@ import { ClientProxy } from '@nestjs/microservices';
 import { APP_MICROSERVICES } from '@/libs/common/src';
 import { users } from '@/libs/common/src/database/user/entities/user.entity';
 import { Observable } from 'rxjs';
+import { User } from '@/libs/common/src/decorators/user.decorator';
+import { CreateFullUserDto } from '@/libs/common/src/dtos/user.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -27,9 +30,23 @@ export class AuthController {
   @Post('log-in')
   async logIn(@Body() logInDto: CreateLogInDTO) {
     const user: Observable<users | null> = this.authClient.send(
-      { cmd: 'login' },
+      { cmd: 'login-by-username-and-password' },
       logInDto,
     ) as Observable<users | null>;
+
+    await user.forEach((_user) => {
+      if (!_user) throw new UnauthorizedException();
+    });
+
+    return user;
+  }
+
+  @Get('get-user')
+  async getUser(@User() requestUser: CreateFullUserDto) {
+    const user = this.authClient.send(
+      { cmd: 'get-user-by-uid' },
+      requestUser,
+    ) as Observable<users>;
 
     await user.forEach((_user) => {
       if (!_user) throw new UnauthorizedException();

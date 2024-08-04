@@ -14,7 +14,7 @@ export class UserService {
    *
    * @returns {Promise<users[]>} Users
    */
-  async findAll(): Promise<users[]> {
+  findAll(): Promise<users[]> {
     return this.UserRepository.find();
   }
 
@@ -24,7 +24,17 @@ export class UserService {
    * @param Username - Username
    * @returns {Promise<users[]>} Users
    */
-  async findByUsername(Username: string): Promise<users[]> {
+  findByUsername(Username: string): Promise<users[]> {
     return this.UserRepository.findBy({ Username });
+  }
+
+  /**
+   * Find user by uid.
+   *
+   * @param Uid - User's uid
+   * @returns {Promise<users>} User
+   */
+  findByUid(Uid: string): Promise<users> {
+    return this.UserRepository.findOneBy({ Uid });
   }
 }

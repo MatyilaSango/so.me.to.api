@@ -3,6 +3,7 @@ import { CreateLogInDTO } from '@/libs/common/src/dtos/log-in.dto';
 import { UserService } from '@/libs/common/src/database/user/services/user.service';
 import { users } from '@/libs/common/src/database/user/entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { CreateFullUserDto } from '@/libs/common/src/dtos/user.dto';
 
 @Injectable()
 export class AuthService {
@@ -14,9 +15,12 @@ export class AuthService {
    * Log users in by finding their accounts.
    *
    * @param {CreateLogInDTO} param - Login credentials.
-   * @returns {Promise<users | null>} users
+   * @returns {Promise<users | null>} user
    */
-  async login({ username, password }: CreateLogInDTO): Promise<users | null> {
+  async loginByUsernameAndPassword({
+    username,
+    password,
+  }: CreateLogInDTO): Promise<users | null> {
     const users: users[] = await this.userService.findByUsername(username);
 
     for (const user of users) {
@@ -24,11 +28,35 @@ export class AuthService {
 
       if (!isRightUser) continue;
 
-      delete user.Password;
-
-      if (isRightUser) return user;
+      return this.prepareUserForDelivery(user);
     }
 
     return null;
+  }
+
+  /**
+   * Get user by Uid.
+   *
+   * @param {CreateFullUserDto} Uid - User's uid
+   * @returns {users} user
+   */
+  async getUserByUid({ Uid }: CreateFullUserDto): Promise<users | null> {
+    const user: users = await this.userService.findByUid(Uid);
+
+    if (!user) return null;
+
+    return this.prepareUserForDelivery(user);
+  }
+
+  /**
+   * Prepare user for delivery.
+   *
+   * @param user - User object,
+   * @returns {users} user
+   */
+  prepareUserForDelivery(user: users): users {
+    delete user.Password;
+
+    return user;
   }
 }
