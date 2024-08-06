@@ -13,6 +13,9 @@ export class CreateUserDto {
   @ApiProperty()
   Username: string;
 
+  @ApiProperty()
+  Role: string;
+
   [key: string]: any;
 }
 
