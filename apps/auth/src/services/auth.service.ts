@@ -19,14 +19,14 @@ export class AuthService {
    * @returns {Promise<User | null>} user
    */
   async loginByUsernameAndPassword({
-    username,
-    password,
+    Username,
+    Password,
   }: CreateLogInDTO): Promise<User | null> {
     const User: User[] =
-      await this.userDatabaseService.findByUsername(username);
+      await this.userDatabaseService.findByUsername(Username);
 
     for (const user of User) {
-      const isRightUser = await bcrypt.compare(password, user.Password);
+      const isRightUser = await bcrypt.compare(Password, user.Password);
 
       if (!isRightUser) continue;
 
@@ -57,7 +57,12 @@ export class AuthService {
    * @returns {Promise<boolean>} If user add successfully
    */
   async postUser(post: CreatePostUserDto): Promise<boolean> {
-    const user: User = await this.userDatabaseService.save(post);
+    const password = await bcrypt.hash(post.Password, this.SALT_ROUNDS);
+
+    const user: User = await this.userDatabaseService.save({
+      ...post,
+      Password: password,
+    });
 
     if (!user) return false;
 
