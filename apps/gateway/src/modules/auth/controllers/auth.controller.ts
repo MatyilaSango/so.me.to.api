@@ -14,9 +14,9 @@ import { CreateForgotPasswordDto } from '@/libs/common/src/dtos/forgot-password.
 import { ApiTags } from '@nestjs/swagger';
 import { ClientProxy } from '@nestjs/microservices';
 import { APP_MICROSERVICES } from '@/libs/common/src';
-import { users } from '@/libs/common/src/database/user/entities/user.entity';
+import { User } from '@/libs/common/src/database/user/entities/user.entity';
 import { Observable } from 'rxjs';
-import { User } from '@/libs/common/src/decorators/user.decorator';
+import { User as UserDoc } from '@/libs/common/src/decorators/user.decorator';
 import { CreateFullUserDto } from '@/libs/common/src/dtos/user.dto';
 
 @ApiTags('auth')
@@ -29,10 +29,10 @@ export class AuthController {
 
   @Post('log-in')
   async logIn(@Body() logInDto: CreateLogInDTO) {
-    const user: Observable<users | null> = this.authClient.send(
+    const user: Observable<User | null> = this.authClient.send(
       { cmd: 'login-by-username-and-password' },
       logInDto,
-    ) as Observable<users | null>;
+    ) as Observable<User | null>;
 
     await user.forEach((_user) => {
       if (!_user) throw new UnauthorizedException();
@@ -42,11 +42,11 @@ export class AuthController {
   }
 
   @Get('get-user')
-  async getUser(@User() requestUser: CreateFullUserDto) {
+  async getUser(@UserDoc() requestUser: CreateFullUserDto) {
     const user = this.authClient.send(
-      { cmd: 'get-user-by-uid' },
+      { cmd: 'get-user-by-uuid' },
       requestUser,
-    ) as Observable<users>;
+    ) as Observable<User>;
 
     await user.forEach((_user) => {
       if (!_user) throw new UnauthorizedException();

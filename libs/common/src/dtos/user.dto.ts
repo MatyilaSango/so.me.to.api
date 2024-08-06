@@ -21,5 +21,5 @@ export class CreateFullUserDto extends CreateUserDto {
   Id: number;
 
   @ApiProperty()
-  Uid: string;
+  Uuid: string;
 }

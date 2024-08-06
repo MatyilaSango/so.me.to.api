@@ -15,7 +15,7 @@ export class AuthController {
     return await this.authService.loginByUsernameAndPassword(createLogInDTO);
   }
 
-  @MessagePattern({ cmd: 'get-user-by-uid' })
+  @MessagePattern({ cmd: 'get-user-by-uuid' })
   async getUserByUid(@Payload() userDto: CreateFullUserDto) {
     return await this.authService.getUserByUid(userDto);
   }

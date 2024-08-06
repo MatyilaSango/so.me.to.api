@@ -6,12 +6,12 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class users {
+export class User {
   @PrimaryGeneratedColumn()
   Id: number;
 
   @Column('varchar')
-  Uid: string;
+  Uuid: string;
 
   @Column('varchar')
   FirstName: string;

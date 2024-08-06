@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateLogInDTO } from '@/libs/common/src/dtos/log-in.dto';
 import { UserService } from '@/libs/common/src/database/user/services/user.service';
-import { users } from '@/libs/common/src/database/user/entities/user.entity';
+import { User } from '@/libs/common/src/database/user/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { CreateFullUserDto } from '@/libs/common/src/dtos/user.dto';
 
@@ -12,18 +12,18 @@ export class AuthService {
   constructor(private userService: UserService) {}
 
   /**
-   * Log users in by finding their accounts.
+   * Log User in by finding their accounts.
    *
    * @param {CreateLogInDTO} param - Login credentials.
-   * @returns {Promise<users | null>} user
+   * @returns {Promise<User | null>} user
    */
   async loginByUsernameAndPassword({
     username,
     password,
-  }: CreateLogInDTO): Promise<users | null> {
-    const users: users[] = await this.userService.findByUsername(username);
+  }: CreateLogInDTO): Promise<User | null> {
+    const User: User[] = await this.userService.findByUsername(username);
 
-    for (const user of users) {
+    for (const user of User) {
       const isRightUser = await bcrypt.compare(password, user.Password);
 
       if (!isRightUser) continue;
@@ -38,10 +38,10 @@ export class AuthService {
    * Get user by Uid.
    *
    * @param {CreateFullUserDto} Uid - User's uid
-   * @returns {users} user
+   * @returns {User} user
    */
-  async getUserByUid({ Uid }: CreateFullUserDto): Promise<users | null> {
-    const user: users = await this.userService.findByUid(Uid);
+  async getUserByUid({ Uid }: CreateFullUserDto): Promise<User | null> {
+    const user: User = await this.userService.findByUid(Uid);
 
     if (!user) return null;
 
@@ -52,9 +52,9 @@ export class AuthService {
    * Prepare user for delivery.
    *
    * @param user - User object,
-   * @returns {users} user
+   * @returns {User} user
    */
-  prepareUserForDelivery(user: users): users {
+  prepareUserForDelivery(user: User): User {
     delete user.Password;
 
     return user;
