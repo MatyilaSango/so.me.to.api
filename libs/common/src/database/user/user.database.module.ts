@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { databaseProviders } from './providers/database.provider';
 import { ConfigModule } from '@nestjs/config';
 import { databaseConfig } from '@/libs/common/src';
-import { UserService } from './services/user.service';
+import { UserDatabaseService } from './services/user.database.service';
 import { userProviders } from './providers/user.provider';
 
 @Module({
@@ -11,7 +11,7 @@ import { userProviders } from './providers/user.provider';
       load: [databaseConfig],
     }),
   ],
-  providers: [...databaseProviders, ...userProviders, UserService],
+  providers: [...databaseProviders, ...userProviders, UserDatabaseService],
   exports: [...databaseProviders, ...userProviders],
 })
 export class UserDatabaseModule {}

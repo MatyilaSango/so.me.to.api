@@ -7,6 +7,7 @@ import {
   Inject,
   Post,
   UnauthorizedException,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { CreateLogInDTO } from '@/libs/common/src/dtos/log-in.dto';
 import { CreatePostUserDto } from '@/libs/common/src/dtos/sign-up.dto';
@@ -18,6 +19,7 @@ import { User } from '@/libs/common/src/database/user/entities/user.entity';
 import { Observable } from 'rxjs';
 import { User as UserDoc } from '@/libs/common/src/decorators/user.decorator';
 import { CreateFullUserDto } from '@/libs/common/src/dtos/user.dto';
+import { Roles } from '@/libs/common/src/types/enums/roles.enum';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -56,9 +58,18 @@ export class AuthController {
   }
 
   @Post('sign-up')
-  @HttpCode(HttpStatus.CREATED)
-  signUp(@Body() signUpDto: CreatePostUserDto) {
-    throw new Error('Not implemented!');
+  async signUp(@Body() signUpDto: CreatePostUserDto) {
+    const response = this.authClient.send<boolean, CreatePostUserDto>(
+      { cmd: 'post-user' },
+      { Role: Roles.CLIENT, ...signUpDto },
+    );
+
+    await response.forEach((res) => {
+      if (!res)
+        throw new UnprocessableEntityException({ message: 'Can not process!' });
+    });
+
+    return { message: 'User successfully created!' };
   }
 
   @Post('forgot-password')

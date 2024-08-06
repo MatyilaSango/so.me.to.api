@@ -1,15 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { CreateLogInDTO } from '@/libs/common/src/dtos/log-in.dto';
-import { UserService } from '@/libs/common/src/database/user/services/user.service';
+import { UserDatabaseService } from '@/libs/common/src/database/user/services/user.database.service';
 import { User } from '@/libs/common/src/database/user/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { CreateFullUserDto } from '@/libs/common/src/dtos/user.dto';
+import { CreatePostUserDto } from '@/libs/common/src/dtos/sign-up.dto';
 
 @Injectable()
 export class AuthService {
   private readonly SALT_ROUNDS: number = 10;
 
-  constructor(private userService: UserService) {}
+  constructor(private userDatabaseService: UserDatabaseService) {}
 
   /**
    * Log User in by finding their accounts.
@@ -21,7 +22,8 @@ export class AuthService {
     username,
     password,
   }: CreateLogInDTO): Promise<User | null> {
-    const User: User[] = await this.userService.findByUsername(username);
+    const User: User[] =
+      await this.userDatabaseService.findByUsername(username);
 
     for (const user of User) {
       const isRightUser = await bcrypt.compare(password, user.Password);
@@ -35,17 +37,31 @@ export class AuthService {
   }
 
   /**
-   * Get user by Uid.
+   * Get user by Uuid.
    *
-   * @param {CreateFullUserDto} Uid - User's uid
-   * @returns {User} user
+   * @param {CreateFullUserDto} Uuid - User's uuid
+   * @returns {Promise<User | null>} user
    */
-  async getUserByUid({ Uid }: CreateFullUserDto): Promise<User | null> {
-    const user: User = await this.userService.findByUid(Uid);
+  async getUserByUid({ Uuid }: CreateFullUserDto): Promise<User | null> {
+    const user: User = await this.userDatabaseService.findByUuid(Uuid);
 
     if (!user) return null;
 
     return this.prepareUserForDelivery(user);
+  }
+
+  /**
+   * Post user in database.
+   *
+   * @param {CreatePostUserDto} post - User details
+   * @returns {Promise<boolean>} If user add successfully
+   */
+  async postUser(post: CreatePostUserDto): Promise<boolean> {
+    const user: User = await this.userDatabaseService.save(post);
+
+    if (!user) return false;
+
+    return true;
   }
 
   /**

@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
 import { v4 as uuidv4 } from 'uuid';
-import { CreatePostUserDto } from '../../../dtos/sign-up.dto';
+import { CreatePostUserDto } from '@/libs/common/src/dtos/sign-up.dto';
 
 @Injectable()
 export class UserDatabaseService {
@@ -40,7 +40,13 @@ export class UserDatabaseService {
     return this.UserRepository.findOneBy({ Uuid });
   }
 
-  async save(post: CreatePostUserDto): Promise<User> {
+  /**
+   * Post user in database.
+   *
+   * @param {CreatePostUserDto} post - User details
+   * @returns {Promise<User>} User
+   */
+  save(post: CreatePostUserDto): Promise<User> {
     const uuid = uuidv4();
 
     // if (!isUUID(uuid)) return this.save(post);
@@ -49,7 +55,7 @@ export class UserDatabaseService {
 
     // if (user) return this.save(post);
 
-    const user: User = { Uuid: uuid, ...(post as User) };
+    const user: User = { Uuid: uuid, ...post } as User;
 
     return this.UserRepository.save<User>(user);
   }

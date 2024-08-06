@@ -23,12 +23,12 @@ export class ExceptionInterceptor implements NestInterceptor {
               {
                 data: err,
                 _metadata: getResponeMetaData(
-                  err.response.statusCode,
+                  err.response?.statusCode,
                   context,
                   request,
                 ),
               },
-              err.response.statusCode,
+              err.response?.statusCode,
             ),
         ),
       ),
