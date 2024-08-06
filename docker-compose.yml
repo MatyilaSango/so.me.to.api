@@ -1,5 +1,21 @@
 version: '3.9'
 services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - '15672:15672' # Management UI
+      - '5672:5672' # Default RabbitMQ Port
+
+  db:
+    image: postgres
+    env_file:
+      - .env
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: always
+
   gateway:
     build:
       context: ./
@@ -34,14 +50,19 @@ services:
       - .:/app
       - nodemodules:/app/node_modules
     depends_on:
+      - db
       - rabbitmq
       - gateway
+    restart: always
 
-  rabbitmq:
-    image: rabbitmq:3-management
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    env_file:
+      - .env
     ports:
-      - '15672:15672' # Management UI
-      - '5672:5672' # Default RabbitMQ Port
+      - '5050:80'
 
 volumes:
   nodemodules: {}
+  postgres-data: {}
