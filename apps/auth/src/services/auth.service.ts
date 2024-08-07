@@ -2,15 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { CreateLogInDTO } from '@/libs/common/src/dtos/log-in.dto';
 import { UserDatabaseService } from '@/libs/common/src/database/user/services/user.database.service';
 import { User } from '@/libs/common/src/database/user/entities/user.entity';
-import * as bcrypt from 'bcrypt';
 import { CreateFullUserDto } from '@/libs/common/src/dtos/user.dto';
 import { CreatePostUserDto } from '@/libs/common/src/dtos/sign-up.dto';
+import { EncryptionService } from '@/libs/common/src/encryption/encryption.service';
 
 @Injectable()
 export class AuthService {
-  private readonly SALT_ROUNDS: number = 10;
-
-  constructor(private userDatabaseService: UserDatabaseService) {}
+  constructor(
+    private userDatabaseService: UserDatabaseService,
+    private readonly encryptionService: EncryptionService,
+  ) {}
 
   /**
    * Log User in by finding their accounts.
@@ -26,7 +27,10 @@ export class AuthService {
       await this.userDatabaseService.findByUsername(Username);
 
     for (const user of User) {
-      const isRightUser = await bcrypt.compare(Password, user.Password);
+      const isRightUser = this.encryptionService.validateHashedData(
+        Password,
+        user.Password,
+      );
 
       if (!isRightUser) continue;
 
@@ -57,7 +61,9 @@ export class AuthService {
    * @returns {Promise<boolean>} If user add successfully
    */
   async postUser(post: CreatePostUserDto): Promise<boolean> {
-    const password = await bcrypt.hash(post.Password, this.SALT_ROUNDS);
+    const password = this.encryptionService.hashPayloadWithBcrypt(
+      post.Password,
+    );
 
     const user: User = await this.userDatabaseService.save({
       ...post,
