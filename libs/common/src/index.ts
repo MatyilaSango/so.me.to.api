@@ -11,4 +11,8 @@ export * from './logger/logger.module';
 export * from './types/enums/app.enums';
 export * from './types/enums/rabbit-mq.enum';
 
+export * from './jwt/jwtAuth.module';
+
+export * from './types/interfaces/auth.interface';
+
 export { appConfig, databaseConfig, keysConfig };

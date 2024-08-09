@@ -7,9 +7,16 @@ import { UserDatabaseModule } from '@/libs/common/src/database/user/user.databas
 import { UserDatabaseService } from '@/libs/common/src/database/user/services/user.database.service';
 import { EncryptionModule } from '@/libs/common/src/encryption/encryption.module';
 import { EncryptionService } from '@/libs/common/src/encryption/encryption.service';
+import { JwtAuthModule } from '@/libs/common/src';
 
 @Module({
-  imports: [LoggerModule, RabbitMQModule, UserDatabaseModule, EncryptionModule],
+  imports: [
+    LoggerModule,
+    RabbitMQModule,
+    UserDatabaseModule,
+    EncryptionModule,
+    JwtAuthModule,
+  ],
   controllers: [AuthController],
   providers: [AuthService, UserDatabaseService, EncryptionService],
 })
