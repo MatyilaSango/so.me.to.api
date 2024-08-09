@@ -5,6 +5,7 @@ import { User } from '@/libs/common/src/database/user/entities/user.entity';
 import { CreateFullUserDto } from '@/libs/common/src/dtos/user.dto';
 import { CreatePostUserDto } from '@/libs/common/src/dtos/sign-up.dto';
 import { EncryptionService } from '@/libs/common/src/encryption/encryption.service';
+import { IAuthUser } from '@/libs/common/src';
 
 @Injectable()
 export class AuthService {
@@ -14,15 +15,15 @@ export class AuthService {
   ) {}
 
   /**
-   * Log User in by finding their accounts.
+   * Log user in by finding account.
    *
    * @param {CreateLogInDTO} param - Login credentials.
-   * @returns {Promise<User | null>} user
+   * @returns {Promise<IAuthUser | null>} User payload
    */
   async loginByUsernameAndPassword({
     Username,
     Password,
-  }: CreateLogInDTO): Promise<User | null> {
+  }: CreateLogInDTO): Promise<IAuthUser | null> {
     const User: User[] =
       await this.userDatabaseService.findByUsername(Username);
 
@@ -34,7 +35,7 @@ export class AuthService {
 
       if (!isRightUser) continue;
 
-      return this.prepareUserForDelivery(user);
+      return { Uuid: user.Uuid, Role: user.Role };
     }
 
     return null;
@@ -45,6 +46,7 @@ export class AuthService {
    *
    * @param {CreateFullUserDto} Uuid - User's uuid
    * @returns {Promise<User | null>} user
+   * This needs to be moved to user microservice.
    */
   async getUserByUid({ Uuid }: CreateFullUserDto): Promise<User | null> {
     const user: User = await this.userDatabaseService.findByUuid(Uuid);

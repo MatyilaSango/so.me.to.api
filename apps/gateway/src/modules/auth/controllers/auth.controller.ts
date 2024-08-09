@@ -14,9 +14,8 @@ import { CreatePostUserDto } from '@/libs/common/src/dtos/sign-up.dto';
 import { CreateForgotPasswordDto } from '@/libs/common/src/dtos/forgot-password.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { ClientProxy } from '@nestjs/microservices';
-import { APP_MICROSERVICES } from '@/libs/common/src';
+import { APP_MICROSERVICES, IJwtToken } from '@/libs/common/src';
 import { User } from '@/libs/common/src/database/user/entities/user.entity';
-import { Observable } from 'rxjs';
 import { User as UserDoc } from '@/libs/common/src/decorators/user.decorator';
 import { CreateFullUserDto } from '@/libs/common/src/dtos/user.dto';
 import { Roles } from '@/libs/common/src/types/enums/roles.enum';
@@ -31,24 +30,24 @@ export class AuthController {
 
   @Post('log-in')
   async logIn(@Body() logInDto: CreateLogInDTO) {
-    const user: Observable<User | null> = this.authClient.send(
+    const jwtToken = this.authClient.send<IJwtToken | null, CreateLogInDTO>(
       { cmd: 'login-by-username-and-password' },
       logInDto,
-    ) as Observable<User | null>;
+    );
 
-    await user.forEach((_user) => {
-      if (!_user) throw new UnauthorizedException();
+    await jwtToken.forEach((token) => {
+      if (!token) throw new UnauthorizedException();
     });
 
-    return user;
+    return jwtToken;
   }
 
   @Get('get-user')
   async getUser(@UserDoc() requestUser: CreateFullUserDto) {
-    const user = this.authClient.send(
+    const user = this.authClient.send<User, CreateFullUserDto>(
       { cmd: 'get-user-by-uuid' },
       requestUser,
-    ) as Observable<User>;
+    );
 
     await user.forEach((_user) => {
       if (!_user) throw new UnauthorizedException();
