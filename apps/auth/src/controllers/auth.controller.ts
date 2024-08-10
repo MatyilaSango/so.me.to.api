@@ -2,7 +2,6 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { AuthService } from '../services/auth.service';
 import { CreateLogInDTO } from '@/libs/common/src/dtos/log-in.dto';
-import { CreateFullUserDto } from '@/libs/common/src/dtos/user.dto';
 import { CreatePostUserDto } from '@/libs/common/src/dtos/sign-up.dto';
 import { IAuthUser, IJwtToken } from '@/libs/common/src';
 import { JwtService } from '@nestjs/jwt';
@@ -26,12 +25,6 @@ export class AuthController {
       accessToken: this.jwtService.sign(userPayload),
       expiresIn: this.configService.get<string>('keys.token.expiry.access'),
     };
-  }
-
-  // This needs to be moved to user microservice
-  @MessagePattern({ cmd: 'get-user-by-uuid' })
-  async getUserByUid(@Payload() userDto: CreateFullUserDto) {
-    return await this.authService.getUserByUid(userDto);
   }
 
   @MessagePattern({ cmd: 'post-user' })

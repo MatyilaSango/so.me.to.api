@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Get,
   HttpCode,
   HttpStatus,
   Inject,
@@ -15,9 +14,6 @@ import { CreateForgotPasswordDto } from '@/libs/common/src/dtos/forgot-password.
 import { ApiTags } from '@nestjs/swagger';
 import { ClientProxy } from '@nestjs/microservices';
 import { APP_MICROSERVICES, IJwtToken } from '@/libs/common/src';
-import { User } from '@/libs/common/src/database/user/entities/user.entity';
-import { User as UserDoc } from '@/libs/common/src/decorators/user.decorator';
-import { CreateFullUserDto } from '@/libs/common/src/dtos/user.dto';
 import { Roles } from '@/libs/common/src/types/enums/roles.enum';
 
 @ApiTags('auth')
@@ -40,17 +36,6 @@ export class AuthController {
     });
 
     return jwtToken;
-  }
-
-  @Get('get-user')
-  async getUser(@UserDoc() requestUser: CreateFullUserDto) {
-    const user = this.authClient.send<User, CreateFullUserDto>({ cmd: 'get-user-by-uuid' }, requestUser);
-
-    await user.forEach((_user) => {
-      if (!_user) throw new UnauthorizedException();
-    });
-
-    return user;
   }
 
   @Post('sign-up')

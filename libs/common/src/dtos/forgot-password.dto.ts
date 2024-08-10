@@ -4,5 +4,5 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateForgotPasswordDto extends PartialType(CreateFullUserDto) {
   @ApiProperty()
-  Email: string;
+  Username: string;
 }

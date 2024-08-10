@@ -55,6 +55,26 @@ services:
       - gateway
     restart: always
 
+  user:
+    build:
+      context: ./
+      dockerfile: ./apps/user/dockerfile
+    env_file:
+      - .env
+    command:
+      - npm
+      - run
+      - start:dev
+      - user
+    volumes:
+      - .:/app
+      - nodemodules:/app/node_modules
+    depends_on:
+      - db
+      - rabbitmq
+      - gateway
+    restart: always
+
   pgadmin:
     image: dpage/pgadmin4
     restart: always

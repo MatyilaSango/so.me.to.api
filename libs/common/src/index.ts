@@ -15,4 +15,17 @@ export * from './jwt/jwtAuth.module';
 
 export * from './types/interfaces/auth.interface';
 
+export * from './database/user/entities/user.entity';
+export * from './database/user/providers/database.provider';
+export * from './database/user/providers/user.provider';
+export * from './database/user/services/user.database.service';
+export * from './database/user/user.database.module';
+
+export * from './encryption/encryption.module';
+export * from './encryption/encryption.service';
+
+export * from './guards/jwt-auth/jwt-auth.guard';
+
+export * from './helpers/requestHeaders.helper';
+
 export { appConfig, databaseConfig, keysConfig };

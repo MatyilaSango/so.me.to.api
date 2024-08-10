@@ -3,10 +3,10 @@ import { AuthController } from './controllers/auth.controller';
 import { AuthService } from './services/auth.service';
 import { LoggerModule } from '@/libs/common/src';
 import { RabbitMQModule } from '@/libs/common/src';
-import { UserDatabaseModule } from '@/libs/common/src/database/user/user.database.module';
-import { UserDatabaseService } from '@/libs/common/src/database/user/services/user.database.service';
-import { EncryptionModule } from '@/libs/common/src/encryption/encryption.module';
-import { EncryptionService } from '@/libs/common/src/encryption/encryption.service';
+import { UserDatabaseModule } from '@/libs/common/src';
+import { UserDatabaseService } from '@/libs/common/src';
+import { EncryptionModule } from '@/libs/common/src';
+import { EncryptionService } from '@/libs/common/src';
 import { JwtAuthModule } from '@/libs/common/src';
 
 @Module({

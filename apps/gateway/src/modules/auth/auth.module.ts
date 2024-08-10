@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AuthController } from './controllers/auth.controller';
-import { RabbitMQModule } from '@/libs/common/src';
-import { RABBIT_MQ_QUEUE } from '@/libs/common/src';
+import { RabbitMQModule, RABBIT_MQ_QUEUE } from '@/libs/common/src';
+import {} from '@/libs/common/src';
 
 @Module({
   imports: [
