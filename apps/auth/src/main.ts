@@ -9,9 +9,7 @@ async function bootstrap() {
 
   const rabbitMqService = app.get<RabbitMQService>(RabbitMQService);
 
-  app.connectMicroservice<MicroserviceOptions>(
-    rabbitMqService.getOptions(RABBIT_MQ_QUEUE.AUTH_QUEUE, true),
-  );
+  app.connectMicroservice<MicroserviceOptions>(rabbitMqService.getOptions(RABBIT_MQ_QUEUE.AUTH_QUEUE, true));
 
   app.startAllMicroservices();
 }

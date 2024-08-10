@@ -17,11 +17,8 @@ export class AuthController {
   ) {}
 
   @MessagePattern({ cmd: 'login-by-username-and-password' })
-  async loginloginByUsernameAndPassword(
-    @Payload() createLogInDTO: CreateLogInDTO,
-  ): Promise<IJwtToken | null> {
-    const userPayload: IAuthUser | null =
-      await this.authService.loginByUsernameAndPassword(createLogInDTO);
+  async loginloginByUsernameAndPassword(@Payload() createLogInDTO: CreateLogInDTO): Promise<IJwtToken | null> {
+    const userPayload: IAuthUser | null = await this.authService.loginByUsernameAndPassword(createLogInDTO);
 
     if (!userPayload) return null;
 

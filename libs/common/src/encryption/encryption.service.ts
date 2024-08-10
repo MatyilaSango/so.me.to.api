@@ -13,9 +13,7 @@ export class EncryptionService {
   constructor(private readonly configService: ConfigService) {
     this.key = this.configService.get<string>('keys.encryption.key');
     this.iv = this.configService.get<string>('keys.encryption.iv');
-    this.algorithm = this.configService.get<string>(
-      'keys.encryption.algorithm',
-    );
+    this.algorithm = this.configService.get<string>('keys.encryption.algorithm');
     this.saltRounds = this.configService.get<number>('keys.saltRounds');
   }
 
@@ -39,8 +37,7 @@ export class EncryptionService {
    */
   decryptAES256EncriptedPayload<T>(encriptedData: string): T {
     const decipher = createDecipheriv(this.algorithm, this.key, this.iv);
-    return (decipher.update(encriptedData, 'utf8', 'hex') +
-      decipher.final('utf8')) as T;
+    return (decipher.update(encriptedData, 'utf8', 'hex') + decipher.final('utf8')) as T;
   }
 
   /**

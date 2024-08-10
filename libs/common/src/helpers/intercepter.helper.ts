@@ -9,11 +9,7 @@ import { Request } from 'express';
  * @param request - request
  * @returns
  */
-export const getResponeMetaData = (
-  statusCode: number,
-  context: ExecutionContext,
-  request: Request,
-) => {
+export const getResponeMetaData = (statusCode: number, context: ExecutionContext, request: Request) => {
   return {
     statusCode,
     message: undefined,

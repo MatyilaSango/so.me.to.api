@@ -12,10 +12,7 @@ async function bootstrap() {
 
   const { ResponseInterceptor, ExceptionInterceptor } = Interceptors;
 
-  app.useGlobalInterceptors(
-    new ResponseInterceptor(),
-    new ExceptionInterceptor(),
-  );
+  app.useGlobalInterceptors(new ResponseInterceptor(), new ExceptionInterceptor());
 
   app.useGlobalPipes(new ValidationPipe());
 
@@ -27,9 +24,7 @@ async function bootstrap() {
   );
   loggerService.log(`App name: ${configService.get<string>('app.name')}`);
   loggerService.log(`App verion: ${configService.get<string>('app.version')}`);
-  loggerService.log(
-    `App microservices: ${configService.get<string>('app.microservices')}`,
-  );
+  loggerService.log(`App microservices: ${configService.get<string>('app.microservices')}`);
   loggerService.log(
     '\n====================================================================================================\n',
   );

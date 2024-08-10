@@ -1,10 +1,5 @@
 import { getResponeMetaData } from '@/libs/common/src/helpers/intercepter.helper';
-import {
-  CallHandler,
-  ExecutionContext,
-  Injectable,
-  NestInterceptor,
-} from '@nestjs/common';
+import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { map, Observable } from 'rxjs';
 
 @Injectable()

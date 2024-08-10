@@ -20,18 +20,11 @@ export class AuthService {
    * @param {CreateLogInDTO} param - Login credentials.
    * @returns {Promise<IAuthUser | null>} User payload
    */
-  async loginByUsernameAndPassword({
-    Username,
-    Password,
-  }: CreateLogInDTO): Promise<IAuthUser | null> {
-    const User: User[] =
-      await this.userDatabaseService.findByUsername(Username);
+  async loginByUsernameAndPassword({ Username, Password }: CreateLogInDTO): Promise<IAuthUser | null> {
+    const User: User[] = await this.userDatabaseService.findByUsername(Username);
 
     for (const user of User) {
-      const isRightUser = this.encryptionService.validateHashedData(
-        Password,
-        user.Password,
-      );
+      const isRightUser = this.encryptionService.validateHashedData(Password, user.Password);
 
       if (!isRightUser) continue;
 
@@ -63,9 +56,7 @@ export class AuthService {
    * @returns {Promise<boolean>} If user add successfully
    */
   async postUser(post: CreatePostUserDto): Promise<boolean> {
-    const password = this.encryptionService.hashPayloadWithBcrypt(
-      post.Password,
-    );
+    const password = this.encryptionService.hashPayloadWithBcrypt(post.Password);
 
     const user: User = await this.userDatabaseService.save({
       ...post,

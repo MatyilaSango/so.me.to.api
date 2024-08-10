@@ -8,9 +8,7 @@ export class RabbitMQService {
   constructor(private configService: ConfigService) {}
 
   private constructRabbitMQURL = () => {
-    const { host, port, user, password } = this.configService.get<object>(
-      'app.rabbitMq',
-    ) as any;
+    const { host, port, user, password } = this.configService.get<object>('app.rabbitMq') as any;
 
     return `amqp://${user}:${password}@${host}:${port}`;
   };

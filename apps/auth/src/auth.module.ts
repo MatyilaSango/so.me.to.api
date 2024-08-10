@@ -10,13 +10,7 @@ import { EncryptionService } from '@/libs/common/src/encryption/encryption.servi
 import { JwtAuthModule } from '@/libs/common/src';
 
 @Module({
-  imports: [
-    LoggerModule,
-    RabbitMQModule,
-    UserDatabaseModule,
-    EncryptionModule,
-    JwtAuthModule,
-  ],
+  imports: [LoggerModule, RabbitMQModule, UserDatabaseModule, EncryptionModule, JwtAuthModule],
   controllers: [AuthController],
   providers: [AuthService, UserDatabaseService, EncryptionService],
 })

@@ -44,10 +44,7 @@ export class AuthController {
 
   @Get('get-user')
   async getUser(@UserDoc() requestUser: CreateFullUserDto) {
-    const user = this.authClient.send<User, CreateFullUserDto>(
-      { cmd: 'get-user-by-uuid' },
-      requestUser,
-    );
+    const user = this.authClient.send<User, CreateFullUserDto>({ cmd: 'get-user-by-uuid' }, requestUser);
 
     await user.forEach((_user) => {
       if (!_user) throw new UnauthorizedException();
@@ -64,8 +61,7 @@ export class AuthController {
     );
 
     await response.forEach((res) => {
-      if (!res)
-        throw new UnprocessableEntityException({ message: 'Can not process!' });
+      if (!res) throw new UnprocessableEntityException({ message: 'Can not process!' });
     });
 
     return { message: 'User successfully created!' };
