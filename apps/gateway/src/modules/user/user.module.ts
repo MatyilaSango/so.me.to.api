@@ -1,6 +1,6 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { UserController } from './controllers/user.controller';
-import { RABBIT_MQ_QUEUE, RabbitMQModule } from '@/libs/common/src';
+import { JwtAuthMiddleware, RABBIT_MQ_QUEUE, RabbitMQModule } from '@/libs/common/src';
 
 @Module({
   imports: [
@@ -12,4 +12,8 @@ import { RABBIT_MQ_QUEUE, RabbitMQModule } from '@/libs/common/src';
   controllers: [UserController],
   providers: [],
 })
-export class UserModule {}
+export class UserModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(JwtAuthMiddleware).forRoutes(UserController);
+  }
+}
