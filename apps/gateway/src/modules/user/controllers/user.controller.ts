@@ -1,9 +1,9 @@
-import { APP_MICROSERVICES, IAuthUser, JwtAuthGuard, User } from '@/libs/common/src';
+import { APP_MICROSERVICES, IAuthUser, UserGuard, User } from '@/libs/common/src';
 import { Userdoc } from '@/libs/common/src/decorators/user.decorator';
 import { Controller, Get, Inject, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 
-@UseGuards(JwtAuthGuard)
+@UseGuards(UserGuard)
 @Controller('user')
 export class UserController {
   constructor(@Inject(APP_MICROSERVICES.USER_MICROSERVICE) private readonly userClient: ClientProxy) {}
