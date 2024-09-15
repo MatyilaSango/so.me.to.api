@@ -24,7 +24,9 @@ export * from './database/user/user.database.module';
 export * from './encryption/encryption.module';
 export * from './encryption/encryption.service';
 
-export * from './guards/jwt-auth/jwt-auth.guard';
+export * from './guards/user/user.guard';
+
+export * from './middlewares/jwt-auth/jwt-auth.middleware';
 
 export * from './helpers/requestHeaders.helper';
 
