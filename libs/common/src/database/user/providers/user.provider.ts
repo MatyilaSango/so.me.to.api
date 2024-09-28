@@ -1,5 +1,6 @@
 import { DataSource } from 'typeorm';
 import { User } from '../entities/user.entity';
+import { databaseProvider } from '../../providers/database.provider';
 
 export const userProviders = [
   {
@@ -8,3 +9,5 @@ export const userProviders = [
     inject: ['DATA_SOURCE'],
   },
 ];
+
+export const userDataSoure = [databaseProvider(User)];
