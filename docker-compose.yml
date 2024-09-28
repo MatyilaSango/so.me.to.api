@@ -1,0 +1,88 @@
+version: '3.9'
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - '15672:15672' # Management UI
+      - '5672:5672' # Default RabbitMQ Port
+
+  db:
+    image: postgres
+    env_file:
+      - .env
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: always
+
+  gateway:
+    build:
+      context: ./
+      dockerfile: ./apps/gateway/dockerfile
+    env_file:
+      - .env
+    command:
+      - npm
+      - run
+      - start:dev
+      - gateway
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
+      - nodemodules:/app/node_modules
+    depends_on:
+      - rabbitmq
+
+  auth:
+    build:
+      context: ./
+      dockerfile: ./apps/auth/dockerfile
+    env_file:
+      - .env
+    command:
+      - npm
+      - run
+      - start:dev
+      - auth
+    volumes:
+      - .:/app
+      - nodemodules:/app/node_modules
+    depends_on:
+      - db
+      - rabbitmq
+      - gateway
+    restart: always
+
+  user:
+    build:
+      context: ./
+      dockerfile: ./apps/user/dockerfile
+    env_file:
+      - .env
+    command:
+      - npm
+      - run
+      - start:dev
+      - user
+    volumes:
+      - .:/app
+      - nodemodules:/app/node_modules
+    depends_on:
+      - db
+      - rabbitmq
+      - gateway
+    restart: always
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - '5050:80'
+
+volumes:
+  nodemodules: {}
+  postgres-data: {}
