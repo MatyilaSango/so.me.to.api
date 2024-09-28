@@ -1,4 +1,5 @@
 import { EncryptionService, User, UserDatabaseService } from '@/libs/common/src';
+import { UpdateUserDto } from '@/libs/common/src/dtos/user.dto';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -21,5 +22,15 @@ export class UserService {
     if (!user) return null;
 
     return user;
+  }
+
+  /**
+   * Update user.
+   *
+   * @param {UpdateUserDto} user - User to be updated
+   * @returns {Promise<User>} Updated user
+   */
+  async updateUser(user: UpdateUserDto): Promise<User> {
+    return await this.userDatabaseService.update(user);
   }
 }

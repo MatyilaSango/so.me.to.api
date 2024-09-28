@@ -1,7 +1,10 @@
+import { ClientProxy } from '@nestjs/microservices';
+import { Observable } from 'rxjs';
+import { Body, Controller, Get, HttpException, Inject, Put, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { APP_MICROSERVICES, IAuthUser, UserGuard, User } from '@/libs/common/src';
 import { Userdoc } from '@/libs/common/src/decorators/user.decorator';
-import { Controller, Get, Inject, UnauthorizedException, UseGuards } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
+import { UpdateUserDto } from '@/libs/common/src/dtos/user.dto';
+import { EnumMessagePattern } from '@/libs/common/src/types/enums/message-pattern.enum';
 
 @UseGuards(UserGuard)
 @Controller('user')
@@ -10,12 +13,24 @@ export class UserController {
 
   @Get('info')
   async getUserInfo(@Userdoc() userdoc: IAuthUser) {
-    const user = this.userClient.send<User, IAuthUser>({ cmd: 'get-user-by-uuid' }, userdoc);
+    const user = this.userClient.send<User, IAuthUser>({ cmd: EnumMessagePattern.GET_USER_BY_UUID }, userdoc);
 
-    await user.forEach((_user) => {
-      if (!_user) throw new UnauthorizedException();
+    return this.validateRespone(user, new UnauthorizedException());
+  }
+
+  @Put('update')
+  async updateUser(@Userdoc() userdoc: IAuthUser, @Body() userDto: UpdateUserDto) {
+    const preparedUserDto: UpdateUserDto = { ...userDto, Uuid: userdoc.Uuid, Role: userdoc.Role };
+    const user = this.userClient.send<User, UpdateUserDto>({ cmd: EnumMessagePattern.UPDATE_USER }, preparedUserDto);
+
+    return this.validateRespone(user, new UnauthorizedException());
+  }
+
+  private async validateRespone<T>(response: Observable<T>, exception: HttpException) {
+    await response.forEach((_response) => {
+      if (!_response) throw exception;
     });
 
-    return user;
+    return response;
   }
 }
