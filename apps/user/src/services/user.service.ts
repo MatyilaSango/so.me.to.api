@@ -20,18 +20,6 @@ export class UserService {
 
     if (!user) return null;
 
-    return this.prepareUserForDelivery(user);
-  }
-
-  /**
-   * Prepare user for delivery.
-   *
-   * @param user - User object,
-   * @returns {User} user
-   */
-  prepareUserForDelivery(user: User): User {
-    delete user.Password;
-
     return user;
   }
 }
