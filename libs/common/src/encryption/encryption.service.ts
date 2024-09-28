@@ -8,7 +8,7 @@ export class EncryptionService {
   private key: string;
   private iv: string;
   private algorithm: string;
-  private saltRounds: number = 16;
+  private saltRounds: number = 0;
 
   constructor(private readonly configService: ConfigService) {
     this.key = this.configService.get<string>('keys.encryption.key');

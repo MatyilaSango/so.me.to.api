@@ -14,5 +14,5 @@ export default registerAs('keys', () => ({
     iv: process.env.ENCRYPTION_IV,
     algorithm: process.env.ENCRYPTION_ALGORITHM,
   },
-  saltRounds: process.env.SALT_ROUNDS,
+  saltRounds: Number(process.env.SALT_ROUNDS ?? 16),
 }));
