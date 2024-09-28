@@ -1,3 +1,4 @@
+import { PartialType } from '@nestjs/mapped-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, Length, MinLength } from 'class-validator';
 
@@ -23,8 +24,6 @@ export class CreateUserDto {
 
   @ApiProperty()
   Role: string;
-
-  [key: string]: any;
 }
 
 export class CreateFullUserDto extends CreateUserDto {
@@ -38,4 +37,4 @@ export class CreateFullUserDto extends CreateUserDto {
   Uuid: string;
 }
 
-export class UpdateUserDto extends CreateFullUserDto {}
+export class UpdateUserDto extends PartialType<CreateFullUserDto>(CreateFullUserDto, { skipNullProperties: true }) {}
