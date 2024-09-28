@@ -6,6 +6,7 @@ import { CreatePostUserDto } from '@/libs/common/src/dtos/sign-up.dto';
 import { IAuthUser, IJwtToken } from '@/libs/common/src';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { EnumMessagePattern } from '@/libs/common/src/types/enums/message-pattern.enum';
 
 @Controller()
 export class AuthController {
@@ -15,7 +16,7 @@ export class AuthController {
     private configService: ConfigService,
   ) {}
 
-  @MessagePattern({ cmd: 'login-by-username-and-password' })
+  @MessagePattern({ cmd: EnumMessagePattern.LOG_IN_BY_USERNAME_AND_PASSWORD })
   async loginloginByUsernameAndPassword(@Payload() createLogInDTO: CreateLogInDTO): Promise<IJwtToken | null> {
     const userPayload: IAuthUser | null = await this.authService.loginByUsernameAndPassword(createLogInDTO);
 
@@ -27,7 +28,7 @@ export class AuthController {
     };
   }
 
-  @MessagePattern({ cmd: 'post-user' })
+  @MessagePattern({ cmd: EnumMessagePattern.POST_USER })
   async postUser(@Payload() postDto: CreatePostUserDto) {
     return await this.authService.postUser(postDto);
   }

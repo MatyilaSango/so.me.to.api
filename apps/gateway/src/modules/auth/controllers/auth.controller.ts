@@ -15,6 +15,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { ClientProxy } from '@nestjs/microservices';
 import { APP_MICROSERVICES, IJwtToken } from '@/libs/common/src';
 import { Roles } from '@/libs/common/src/types/enums/roles.enum';
+import { EnumMessagePattern } from '@/libs/common/src/types/enums/message-pattern.enum';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -27,7 +28,7 @@ export class AuthController {
   @Post('log-in')
   async logIn(@Body() logInDto: CreateLogInDTO) {
     const jwtToken = this.authClient.send<IJwtToken | null, CreateLogInDTO>(
-      { cmd: 'login-by-username-and-password' },
+      { cmd: EnumMessagePattern.LOG_IN_BY_USERNAME_AND_PASSWORD },
       logInDto,
     );
 
@@ -41,7 +42,7 @@ export class AuthController {
   @Post('sign-up')
   async signUp(@Body() signUpDto: CreatePostUserDto) {
     const response = this.authClient.send<boolean, CreatePostUserDto>(
-      { cmd: 'post-user' },
+      { cmd: EnumMessagePattern.POST_USER },
       { Role: Roles.CLIENT, ...signUpDto },
     );
 
