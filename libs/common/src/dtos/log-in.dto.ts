@@ -8,7 +8,7 @@ export class CreateLogInDTO {
   Username: string;
 
   @ApiProperty()
-  @IsNotEmpty()
   @MinLength(8)
+  @IsNotEmpty()
   Password: string;
 }
