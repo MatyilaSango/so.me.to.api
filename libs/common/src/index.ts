@@ -16,7 +16,7 @@ export * from './jwt/jwtAuth.module';
 export * from './types/interfaces/auth.interface';
 
 export * from './database/user/entities/user.entity';
-export * from './database/user/providers/database.provider';
+export * from './database/providers/database.provider';
 export * from './database/user/providers/user.provider';
 export * from './database/user/services/user.database.service';
 export * from './database/user/user.database.module';
@@ -29,5 +29,6 @@ export * from './guards/user/user.guard';
 export * from './middlewares/jwt-auth/jwt-auth.middleware';
 
 export * from './helpers/requestHeaders.helper';
+export * from './helpers/NestApplication.helper';
 
 export { appConfig, databaseConfig, keysConfig };
