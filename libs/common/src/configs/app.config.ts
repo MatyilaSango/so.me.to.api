@@ -4,7 +4,7 @@ import { APP_MICROSERVICES } from '../types/enums/app.enums';
 export default registerAs('app', () => ({
   name: process.env.APP_NAME,
   version: process.env.APP_VERSION,
-  microservices: [APP_MICROSERVICES.AUTH_MICROSERVICE],
+  microservices: [APP_MICROSERVICES.AUTH_MICROSERVICE, APP_MICROSERVICES.USER_MICROSERVICE],
   access: process.env.SECRETE,
   refresh: process.env.REFRESH_SECRETE,
   rabbitMq: {
