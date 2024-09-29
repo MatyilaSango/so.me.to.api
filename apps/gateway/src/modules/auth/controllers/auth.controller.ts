@@ -16,6 +16,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import { APP_MICROSERVICES, IJwtToken } from '@/libs/common/src';
 import { Roles } from '@/libs/common/src/types/enums/roles.enum';
 import { EnumMessagePattern } from '@/libs/common/src/types/enums/message-pattern.enum';
+import { validateMicroserviceResponse } from '@/libs/common/src/helpers/responseValidator.helper';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -32,11 +33,7 @@ export class AuthController {
       logInDto,
     );
 
-    await jwtToken.forEach((token) => {
-      if (!token) throw new UnauthorizedException();
-    });
-
-    return jwtToken;
+    return validateMicroserviceResponse(jwtToken, new UnauthorizedException());
   }
 
   @Post('sign-up')
@@ -46,9 +43,7 @@ export class AuthController {
       { Role: Roles.CLIENT, ...signUpDto },
     );
 
-    await response.forEach((res) => {
-      if (!res) throw new UnprocessableEntityException({ message: 'Can not process!' });
-    });
+    await validateMicroserviceResponse(response, new UnprocessableEntityException({ message: 'Can not process!' }));
 
     return { message: 'User successfully created!' };
   }
