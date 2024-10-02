@@ -8,7 +8,7 @@ import {
   UnauthorizedException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { CreateLogInDTO } from '@/libs/common/src/dtos/log-in.dto';
+import { CreateLogInDto } from '@/libs/common/src/dtos/log-in.dto';
 import { CreatePostUserDto } from '@/libs/common/src/dtos/sign-up.dto';
 import { CreateForgotPasswordDto } from '@/libs/common/src/dtos/forgot-password.dto';
 import { ApiTags } from '@nestjs/swagger';
@@ -27,8 +27,8 @@ export class AuthController {
   ) {}
 
   @Post('log-in')
-  async logIn(@Body() logInDto: CreateLogInDTO) {
-    const jwtToken = this.authClient.send<IJwtToken | null, CreateLogInDTO>(
+  async logIn(@Body() logInDto: CreateLogInDto) {
+    const jwtToken = this.authClient.send<IJwtToken | null, CreateLogInDto>(
       { cmd: EnumMessagePattern.LOG_IN_BY_USERNAME_AND_PASSWORD },
       logInDto,
     );
