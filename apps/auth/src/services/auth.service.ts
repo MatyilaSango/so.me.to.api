@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateLogInDTO } from '@/libs/common/src/dtos/log-in.dto';
+import { CreateLogInDto } from '@/libs/common/src/dtos/log-in.dto';
 import { UserDatabaseService } from '@/libs/common/src/database/user/services/user.database.service';
 import { User } from '@/libs/common/src/database/user/entities/user.entity';
 import { CreatePostUserDto } from '@/libs/common/src/dtos/sign-up.dto';
@@ -16,10 +16,10 @@ export class AuthService {
   /**
    * Log user in by finding account.
    *
-   * @param {CreateLogInDTO} param - Login credentials.
+   * @param {CreateLogInDto} param - Login credentials.
    * @returns {Promise<IAuthUser | null>} User payload
    */
-  async loginByUsernameAndPassword({ Username, Password }: CreateLogInDTO): Promise<IAuthUser | null> {
+  async loginByUsernameAndPassword({ Username, Password }: CreateLogInDto): Promise<IAuthUser | null> {
     const User: User[] = await this.userDatabaseService.findByUsername(Username);
 
     for (const user of User) {

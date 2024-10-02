@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { AuthService } from '../services/auth.service';
-import { CreateLogInDTO } from '@/libs/common/src/dtos/log-in.dto';
+import { CreateLogInDto } from '@/libs/common/src/dtos/log-in.dto';
 import { CreatePostUserDto } from '@/libs/common/src/dtos/sign-up.dto';
 import { IAuthUser, IJwtToken } from '@/libs/common/src';
 import { JwtService } from '@nestjs/jwt';
@@ -17,7 +17,7 @@ export class AuthController {
   ) {}
 
   @MessagePattern({ cmd: EnumMessagePattern.LOG_IN_BY_USERNAME_AND_PASSWORD })
-  async loginloginByUsernameAndPassword(@Payload() createLogInDTO: CreateLogInDTO): Promise<IJwtToken | null> {
+  async loginloginByUsernameAndPassword(@Payload() createLogInDTO: CreateLogInDto): Promise<IJwtToken | null> {
     const userPayload: IAuthUser | null = await this.authService.loginByUsernameAndPassword(createLogInDTO);
 
     if (!userPayload) return null;
